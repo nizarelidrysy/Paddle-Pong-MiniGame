@@ -1,0 +1,54 @@
+@Preview(showBackground = true)
+@Composable
+fun SportLabel() {
+    val fieldWidth = 320
+    val fieldHeight = 500
+
+    val racketWidth = 100
+    val racketHeight = 20
+    val racketX = (fieldWidth - racketWidth) / 2
+    val racketY = fieldHeight - racketHeight - 20
+
+    val ballSize = 32
+    val ballX = remember { mutableStateOf((fieldWidth - ballSize) / 2) }
+    val ballY = remember { mutableStateOf(180) }
+    val moveX = remember { mutableStateOf(4) }
+    val moveY = remember { mutableStateOf(5) }
+
+    Box(
+        Modifier.size(fieldWidth.dp, fieldHeight.dp)
+            .background(Color(0xFF2E7D32))
+    ) {
+        Box(
+            Modifier.offset(racketX.dp, racketY.dp)
+                .size(racketWidth.dp, racketHeight.dp)
+                .background(Color.Red)
+        )
+
+        Text(
+            "🥎",
+            fontSize = ballSize.sp,
+            modifier = Modifier.offset(ballX.value.dp, ballY.value.dp)
+        )
+    }
+    
+        LaunchedEffect(Unit) {
+        while (true) {
+            if (ballX.value + moveX.value < 0 ||
+                ballX.value + moveX.value > fieldWidth - ballSize) {
+                moveX.value = -moveX.value
+            }
+
+            if (ballY.value + moveY.value < 0 ||
+                ballY.value + moveY.value > fieldHeight - ballSize) {
+                moveY.value = -moveY.value
+            }
+
+            ballX.value += moveX.value
+            ballY.value += moveY.value
+
+            delay(40)
+        }
+    }
+
+ }
